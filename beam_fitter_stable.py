@@ -170,11 +170,11 @@ class image():
         self.integrateImage()
 
         self.gx = Gaussian(self.xpix, self.xInt)
-        print('wx =  ', self.gx.w0)
-        print('ewx = ', self.gx.ew0)
+        # print('wx =  ', self.gx.w0)
+        # print('ewx = ', self.gx.ew0)
         self.gy = Gaussian(self.ypix, self.yInt)   
-        print('wy =  ', self.gy.w0)
-        print('ewy = ', self.gy.ew0)   
+        # print('wy =  ', self.gy.w0)
+        # print('ewy = ', self.gy.ew0)   
 
 class profile():
     def __init__(self, directory, pixelSize=5.2e-3):

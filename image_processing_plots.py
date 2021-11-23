@@ -11,6 +11,7 @@ from beam_fitting_code import profile
 from beam_fitting_code import image
 import scipy.optimize as scpo
 
+
 #file images are being taken from
 d = "./images/2021/November/22/Measure 16"
 amplitude_range= np.arange(0, 0.3, 0.005)  
@@ -22,11 +23,11 @@ profile=profile(d)
 z, wx, wy = profile.analyseBeamProfile(d)
 
 #collect intensity values from images
-for x in range(0,(3*len(amplitude_range)),1):
+#for x in range(0,(3*len(amplitude_range)),1):
     
-    d = d + "\{}.png". format(x)
+ #   d = d + "\{}.png". format(x)
     
-    yInt, xInt, xpix, ypix, xth, xopt, yth, yopt = profile.plotSingle()
+#    yInt, xInt, xpix, ypix, xth, xopt, yth, yopt = profile.plotSingle()
 
 #remove background - code makes image 0 the background image
 wx_corrected = []
@@ -63,7 +64,6 @@ plt.ylabel('Beam $\\frac{1}{e^2} $ waist in x / mm')
 plt.xlabel('Amplitude ')
 #plt.axvspan(200,300, 0, 2, alpha=0.25, color ='green') #bar for consideration at supervision
 plt.legend()
-plt.show()
 
 #plot of beam waist vs milliwaves
 plt.figure(figsize=(10,4))

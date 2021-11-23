@@ -9,6 +9,7 @@ sys.path.append('Z:\Tweezer\People\Alex\Programs')
 #from function_fits import Gaussian as G
 from PIL import Image
 from scipy.optimize import curve_fit
+from tqdm import tqdm
 
 '''.
 10/9/2019
@@ -174,11 +175,11 @@ class image():
         self.integrateImage()
 
         self.gx = Gaussian(self.xpix, self.xInt)
-        print('wx =  ', self.gx.w0)
-        print('ewx = ', self.gx.ew0)
+        # print('wx =  ', self.gx.w0)
+        # print('ewx = ', self.gx.ew0)
         self.gy = Gaussian(self.ypix, self.yInt)   
-        print('wy =  ', self.gy.w0)
-        print('ewy = ', self.gy.ew0)   
+        # print('wy =  ', self.gy.w0)
+        # print('ewy = ', self.gy.ew0)   
 
 class profile():
     def __init__(self, directory, pixelSize=5.2e-3):
@@ -195,11 +196,11 @@ class profile():
         
         i = 0
         print(os.listdir(self.directory))
-        for filename in os.listdir(self.directory):
+        for filename in tqdm(os.listdir(self.directory)):
             
             if filename[-4:] == '.png':
                 #print(filename)
-                print("Pixel Size =",self.pixelSize*1e3,"um")
+                # print("Pixel Size =",self.pixelSize*1e3,"um")
                 im = image(pixelSize=self.pixelSize)
                 im.openImage(filename)
                 if crop_x!=None:
