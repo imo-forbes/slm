@@ -4,6 +4,7 @@ import time
 import json
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import PIL.Image as PILImage
 from shutil import copyfile
 
