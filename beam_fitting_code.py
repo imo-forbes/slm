@@ -16,7 +16,7 @@ from tqdm import tqdm
 Script to fit beam profiles
     
 '''
-d = r"C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\Github\slm\images\2021\November\22\Measure 16"
+d = r"C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm\images\2021\November\22\Measure 5"
     
 
 def arraySorter(*args):
@@ -227,9 +227,9 @@ class profile():
         #z = np.arange(-10,10,0.1)
         
         
-        plt.figure(figsize=(10,4))
-        plt.plot(z, wx, marker = 'o', linestyle = 'none', color = '#AA2B4A', label = 'Beam Waist in x')
-        plt.plot(z, wy, marker = 'o', linestyle = 'none', label = 'Beam Waist in y')
+        #plt.figure(figsize=(10,4))
+        #plt.plot(z, wx, marker = 'o', linestyle = 'none', color = '#AA2B4A', label = 'Beam Waist in x')
+        #plt.plot(z, wy, marker = 'o', linestyle = 'none', label = 'Beam Waist in y')
        # plt.xlim(6.5,9.)
         
         if fit == 'hyperbola':
@@ -240,12 +240,12 @@ class profile():
             self.fitLinear(z, wy,'y', clr = '#006388')
             
         
-        plt.xlabel('Amplitude')
-        plt.ylabel('beam 1/e2 waist / mm')
-        plt.legend()
+        # plt.xlabel('Amplitude')
+        # plt.ylabel('beam 1/e2 waist / mm')
+        # plt.legend()
         
         #plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=2, mode="expand", borderaxespad=0.)
-        plt.show()
+        #plt.show()
         
         
         return z, wx, wy
@@ -312,8 +312,8 @@ class profile():
 
     def plotSingle(self, filename, single = True,crop_x=None,crop_y=None,angle=None):
         """Plot on realisation of the MOT"""
-        if single == True:
-            plt.figure()
+        # if single == True:
+        #     plt.figure()
 
         im = image(pixelSize=self.pixelSize)
         im.openImage(filename)
@@ -329,51 +329,48 @@ class profile():
         xopt = im.gx.applyFit(xth)
         yopt = im.gy.applyFit(yth)
         
-        ax1 = plt.subplot2grid((6,6), (1,1), rowspan=5, colspan = 5)
-        ax2 = plt.subplot2grid((6,6), (1,0), rowspan=5, colspan = 1)
-        ax3 = plt.subplot2grid((6,6), (0, 1), rowspan=1, colspan = 5)
-        plt.subplots_adjust(left = 0.27, right = 0.85)
+        #ax1 = plt.subplot2grid((6,6), (1,1), rowspan=5, colspan = 5)
+        #ax2 = plt.subplot2grid((6,6), (1,0), rowspan=5, colspan = 1)
+        #ax3 = plt.subplot2grid((6,6), (0, 1), rowspan=1, colspan = 5)
+        #plt.subplots_adjust(left = 0.27, right = 0.85)
         # top gaussian
-        ax3.plot(im.xpix, im.xInt)
+       #ax3.plot(im.xpix, im.xInt)
     
-        ax3.xaxis.tick_top()
-        ax3.set_xlabel('x / mm')
-        ax3.xaxis.set_label_position('top')
-        ax3.set_ylabel('Intensity')
-        ax3.set_yticks((0, np.around(np.around(np.max(im.xInt),-1)/2), np.around(np.max(im.xInt),-1)))
-        ax3.set_xlim([np.min(im.xpix), im.xpix[-1]])
-        ax3.set_ylim([np.min(im.xInt), np.max(im.xInt)])
-        ax3.plot(xth, xopt)
+       #ax3.xaxis.tick_top()
+        #ax3.set_xlabel('x / mm')
+        # ax3.xaxis.set_label_position('top')
+        # ax3.set_ylabel('Intensity')
+        # ax3.set_yticks((0, np.around(np.around(np.max(im.xInt),-1)/2), np.around(np.max(im.xInt),-1)))
+        # ax3.set_xlim([np.min(im.xpix), im.xpix[-1]])
+        # ax3.set_ylim([np.min(im.xInt), np.max(im.xInt)])
+        # ax3.plot(xth, xopt)
         
-        # side gaussian
-        ax2.invert_xaxis()
-        ax2.plot(im.yInt,im.ypix)
-        ax2.plot(yopt, yth)
+        # # side gaussian
+        # ax2.invert_xaxis()
+        # ax2.plot(im.yInt,im.ypix)
+        # ax2.plot(yopt, yth)
     
-        ax2.set_ylabel('y / mm')
-        ax2.set_xlabel('Intensity')
-        ax2.set_xticks((0, np.around(np.max(im.ypix),-1)))
-        ax2.set_ylim([0, im.ypix[-1]])
-        ax2.set_xlim([np.max(im.yInt), np.min(im.yInt)])
-        ax2.invert_yaxis()
+        # ax2.set_ylabel('y / mm')
+        # ax2.set_xlabel('Intensity')
+        # ax2.set_xticks((0, np.around(np.max(im.ypix),-1)))
+        # ax2.set_ylim([0, im.ypix[-1]])
+        # ax2.set_xlim([np.max(im.yInt), np.min(im.yInt)])
+        # ax2.invert_yaxis()
   
-        ax1.imshow(im.imvals, interpolation='nearest', extent = [0, im.xpix[-1], 0,  im.ypix[-1]])
-        ax1.yaxis.set_label_position('right')
+        # ax1.imshow(im.imvals, interpolation='nearest', extent = [0, im.xpix[-1], 0,  im.ypix[-1]])
+        # ax1.yaxis.set_label_position('right')
         
-        ax1.set_xlabel('x / mm')
-        ax1.set_ylabel('y / mm')
+        # ax1.set_xlabel('x / mm')
+        # ax1.set_ylabel('y / mm')
         
-        ax1.yaxis.tick_right()
+        # ax1.yaxis.tick_right()
         
-        ax1.legend(loc = 'upper left')
+        #ax1.legend(loc = 'upper left')
         #print(self.MOTx0, self.xc)
         #print(self.MOTy0, self.yc)
         
-        if single == True:
-            plt.show()
-            
-        
-        
+        #if single == True:
+            #plt.show()
             
         return im.yInt, im.xInt, im.xpix, im.ypix, xth, xopt, yth, yopt
     
