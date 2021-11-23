@@ -1,5 +1,5 @@
 # SLM
-Python code for the generation and display of SLM holograms and the analysis of light shaping performed by the holograms.
+Python code for the generation and display of SLM holograms and the analysis of light shaping performed by the holograms. 
 
 ## Modules
 ### `holograms`
@@ -72,6 +72,7 @@ slm = SLM(monitor=1)
 slm.apply_hologram(holo)
 time.sleep(0.5)
 ```
+.
 
 ## Acknowledgements
 - SLM interfacing handled with a slightly modified version of [**slmPy**](https://github.com/wavefrontshaping/slmPy) written by [Sébastien Popoff](https://github.com/wavefrontshaping).
