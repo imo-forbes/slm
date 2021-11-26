@@ -16,7 +16,7 @@ from tqdm import tqdm
 Script to fit beam profiles
     
 '''
-d = r"C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm\images\2021\November\22\Measure 5"
+d = r"C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm\images\2021\November\15\Measure 16"
     
 
 def arraySorter(*args):

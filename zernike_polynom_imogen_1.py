@@ -15,6 +15,7 @@ from camera import ImageHandler,Camera
 import matplotlib.pyplot as plt
 from slm import SLM
 import time
+import warnings
 
 wavelength = 1064*10**-9
 focal_length = 100 * 10 **-3
@@ -75,5 +76,13 @@ for i in range(0,3,1):
     
         #save_image.show_image(array) #can edit out to speed up image taking
         save_image.save(image)
+
+        #check if it's saturated
+        if np.amax(image) == 255:
+            warnings.warn("Maximum pixel is saturated")
+        elif np.amax(image) >= 225:
+            warnings.warn("Maximum pixel value close to saturation")
+        elif np.amax(image) <=50:
+            warnings.warn("Maximum pixel value is below 50")
         
     i = i+1

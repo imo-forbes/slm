@@ -6,19 +6,21 @@ Created on Mon Nov 22 10:35:37 2021
 """
 
 import math
+import warnings
 import numpy as np
 import matplotlib.pyplot as plt
 from beam_fitting_code import profile
-from beam_fitting_code import Gaussian
+from beam_fitting_code import image
 import scipy.optimize as scpo
 from scipy.optimize import curve_fit
 from matplotlib import gridspec
 from pandas import plotting
-
+import imageio
+import warnings
 
 #file images are being taken from
-d = "./images/2021/November/22/Measure 5"
-amplitude_range= np.arange(-0.5, 0.5,  0.01) 
+d = "./images/2021/November/15/Measure 16"
+amplitude_range= np.arange(-50, 50, 5)   
 #intialise modules
 
 profile=profile(d)
@@ -31,17 +33,28 @@ x_intensities=[]
 y_intensities=[]
 x_max_intensities=[]
 y_max_intensities=[]
+max_pixel=[]
+
 
 for x in range(0,(3*len(amplitude_range)+1),1):
-    d =  r"C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm\images\2021\November\22\Measure 5" + "/{}.png". format(x)
+    d =  r"C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm\images\2021\November\15\Measure 16" + "/{}.png". format(x)
     yInt, xInt, xpix, ypix, xth, xopt, yth, yopt = profile.plotSingle(d)
+
+    #find the maximum pixel
+    pix = imageio.imread(d)
+    max_pixel.append(np.amax(pix))
+    if np.amax(pix) == 255:
+        warnings.warn("Maximum pixel is saturated in Image " + str(x))
+    elif np.amax(pix) >= 225:
+        warnings.warn("Maximum pixel value close to saturation: Image "+ str(x) + " has max pixel value " + str(np.amax(pix)))
+    elif np.amax(pix) <=50:
+        warnings.warn("Maximum pixel value is below 50 in Image " + str(x))
 
     #take out max intensity values
     x_intensities.append(xInt)
     y_intensities.append(yInt)
     x_max_intensities.append(max(xInt))
     y_max_intensities.append(max(yInt))
-
 
 #remove background - code makes image 0 the background image
 wx_corrected = []
@@ -53,6 +66,7 @@ for image_no in range(1,len(wx),1):
     
 #breaks list of values into repeats and averages
 images_in_set = len(amplitude_range)
+print(images_in_set)
 
 #repeats and averaging beam radius
 wx_1 = wx[1:(images_in_set+1)]
@@ -113,8 +127,8 @@ residual_y_lim = (-4, 3)
 
 x_res_ax.set_ylim(residual_y_lim)
 y_res_ax.set_ylim(residual_y_lim)
-x_res_ax.set_yticks([-2, 0,2])
-y_res_ax.set_yticks([-2, 0,2])
+x_res_ax.set_yticks([-5, 0,5])
+y_res_ax.set_yticks([-5, 0,5])
 
 #fitting gaussians
 main_plot_ax.plot(amplitude_range*1000,gaus(amplitude_range*1000,*popt_x),label='Gaussian Fit for beam waist in x')
@@ -151,13 +165,20 @@ x_hist_ax.hist(x_norm_residuals, np.linspace(-1,1,8), orientation = 'horizontal'
 y_hist_ax.hist(y_norm_residuals, np.linspace(-1,1,8), orientation = 'horizontal', color='orange')
 
 print(min(wx_average))
-print(min(wy_average))
+print(max(wy_average))
 z_x = np.where(wx_average== min(wx_average))
-z_y = np.where(wy_average == min(wy_average))
+z_y = np.where(wy_average == max(wy_average))
 print(z_x)
 print(z_y)
-print(amplitude_range[63])
-print(amplitude_range[69])
+print(amplitude_range[z_x]*1000)
+print(amplitude_range[z_y]*1000)
+print(standard_error(wx_average))
+print(standard_error(wy_average))
+
+plt.figure()
+plt.scatter(range(0, len(amplitude_range)),max_pixel[0:len(amplitude_range)])
+plt.xlabel('Image Number')
+plt.ylabel('Value of Maximum Pixel in Image')
 
 #plot of beam waist vs milliwaves
 # plt.figure(figsize=(10,4))
@@ -194,7 +215,7 @@ z_x = np.where(x_max_intensity_average== max(x_max_intensity_average))
 z_y = np.where(y_max_intensity_average ==max(y_max_intensity_average))
 print(z_x)
 print(z_y)
-print(amplitude_range[35])
-print(amplitude_range[36])
+# print(amplitude_range[35])
+# print(amplitude_range[36])
 
 plt.show()
