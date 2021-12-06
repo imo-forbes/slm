@@ -94,7 +94,7 @@ class ArrayGenerator():
             I = np.exp(-2*r**2/waist**2)
             I = I/np.max(I)
         if self.circ_aper_center is not None:
-            I = hg.apertures.circ(I,self.circ_aper_center,self.circ_aper_radius)
+            I = hg.apertures.circ(I,x0=self.circ_aper_center[0],y0=self.circ_aper_center[1],radius=self.circ_aper_radius)
         self.input_intensity = I
 
     def set_traps(self,traps):
@@ -176,7 +176,7 @@ class ArrayGenerator():
         self.phi = phi
         holo = (phi%(2*np.pi))/2/np.pi
         if self.circ_aper_center is not None:
-            holo = hg.apertures.circ(holo,self.circ_aper_center,self.circ_aper_radius)
+            holo = hg.apertures.circ(holo,x0=self.circ_aper_center[0],y0=self.circ_aper_center[1],radius=self.circ_aper_radius)
         if self.extra_holos is not None:
             holo = (holo+self.extra_holos)%1
         if save_to_param:
@@ -282,7 +282,7 @@ class ArrayGenerator():
         self.phi = phi
         self.array_holo = (phi%(2*np.pi))/2/np.pi
         if self.circ_aper_center is not None:
-            self.array_holo = hg.apertures.circ(self.array_holo,self.circ_aper_center,self.circ_aper_radius)
+            self.array_holo = hg.apertures.circ(self.array_holo,x0=self.circ_aper_center[0],y0=self.circ_aper_center[1],radius=self.circ_aper_radius)
         if self.extra_holos is not None:
             self.array_holo = (self.array_holo+self.extra_holos)%1
 
@@ -297,7 +297,7 @@ class ArrayGenerator():
                                 + c*((y-y0)**2)))
         return g.ravel()
 
-    def find_traps(self,array,plot=False,width=15,min_distance_between_traps=30):
+    def find_traps(self,array,plot=False,width=2,min_distance_between_traps=5):
         popts = []
         perrs = []
         cam_roi = self.cam.get_roi()
