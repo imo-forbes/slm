@@ -16,8 +16,8 @@ from tqdm import tqdm
 Script to fit beam profiles
     
 '''
-d = r"C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm\images\2021\November\15\Measure 16"
-    
+#d = r'C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm\images\2021\December\19\Measure 0'
+
 
 def arraySorter(*args):
     c = np.zeros([len(args[0]),len(args)])
@@ -121,7 +121,7 @@ class image():
         self.ySlice = None
         self.pixelSize = pixelSize
     
-    def openImage(self, fname, directory=d, fileType = 'png'):
+    def openImage(self, fname, directory=None, fileType = 'png'):
         """Can load the image from a file"""
         if directory != None:
             os.chdir(directory)
@@ -202,7 +202,7 @@ class profile():
                 #print(filename)
                 # print("Pixel Size =",self.pixelSize*1e3,"um")
                 im = image(pixelSize=self.pixelSize)
-                im.openImage(filename)
+                im.openImage(filename,self.directory)
                 if crop_x!=None:
                     im.cropImage(crop_x,crop_y)
                 if angle!=None:
@@ -329,15 +329,15 @@ class profile():
         xopt = im.gx.applyFit(xth)
         yopt = im.gy.applyFit(yth)
         
-        #ax1 = plt.subplot2grid((6,6), (1,1), rowspan=5, colspan = 5)
-        #ax2 = plt.subplot2grid((6,6), (1,0), rowspan=5, colspan = 1)
-        #ax3 = plt.subplot2grid((6,6), (0, 1), rowspan=1, colspan = 5)
-        #plt.subplots_adjust(left = 0.27, right = 0.85)
-        # top gaussian
-       #ax3.plot(im.xpix, im.xInt)
+        # ax1 = plt.subplot2grid((6,6), (1,1), rowspan=5, colspan = 5)
+        # ax2 = plt.subplot2grid((6,6), (1,0), rowspan=5, colspan = 1)
+        # ax3 = plt.subplot2grid((6,6), (0, 1), rowspan=1, colspan = 5)
+        # plt.subplots_adjust(left = 0.27, right = 0.85)
+        # #top gaussian
+        # ax3.plot(im.xpix, im.xInt)
     
-       #ax3.xaxis.tick_top()
-        #ax3.set_xlabel('x / mm')
+        # ax3.xaxis.tick_top()
+        # ax3.set_xlabel('x / mm')
         # ax3.xaxis.set_label_position('top')
         # ax3.set_ylabel('Intensity')
         # ax3.set_yticks((0, np.around(np.around(np.max(im.xInt),-1)/2), np.around(np.max(im.xInt),-1)))
@@ -365,12 +365,12 @@ class profile():
         
         # ax1.yaxis.tick_right()
         
-        #ax1.legend(loc = 'upper left')
-        #print(self.MOTx0, self.xc)
-        #print(self.MOTy0, self.yc)
+        # ax1.legend(loc = 'upper left')
+        # # print(self.MOTx0, self.xc)
+        # # print(self.MOTy0, self.yc)
         
-        #if single == True:
-            #plt.show()
+        # if single == True:
+        #     plt.show()
             
         return im.yInt, im.xInt, im.xpix, im.ypix, xth, xopt, yth, yopt
     

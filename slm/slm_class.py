@@ -7,6 +7,7 @@ import numpy as np
 from .slmpy import SLMdisplay
 from .strtypes import error, warning, info
 
+
 class SLM():
 
     def __init__(self,monitor=1,lut=r"./ScaledLutModel.txt",image_lock=True,gui=None):
