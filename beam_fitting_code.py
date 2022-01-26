@@ -11,13 +11,18 @@ from PIL import Image
 from scipy.optimize import curve_fit
 from tqdm import tqdm
 
+from rich.progress import track
+
+from rich import print
+
+
 '''.
 10/9/2019
 Script to fit beam profiles
     
 '''
-d = r"C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm\images\2021\November\15\Measure 16"
-    
+#d = r'C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm\images\2021\December\06\Measure 4'
+
 
 def arraySorter(*args):
     c = np.zeros([len(args[0]),len(args)])
@@ -49,16 +54,19 @@ class Gaussian:
         i = 0
         
         while (fwhm-np.min(self.y)) > (peak-np.min(self.y)) / 2:
+
+            if np.argmax(self.y)+i >= len(self.y)-1:
+                break
+
             fwhm = self.y[(np.argmax(self.y)+i)]
             i += 1
-            if (np.argmax(self.y)+i == (len(self.y)-1)):
-                break
+           
 
         e2_width = 2 * (self.x[(np.argmax(self.y)+i)]-self.x[(np.argmax(self.y))])
         
         p0 = [(np.max(self.y)-np.min(self.y)),self.x[np.argmax(self.y)], e2_width, np.min(self.y)]
-
-        popt,pcov = curve_fit(self.f,self.x,self.y,p0=p0, maxfev=int(1e5))    
+        
+        popt,pcov = curve_fit(self.f,self.x,self.y,p0=p0, maxfev=int(1e6))    
    
         perr = np.sqrt(np.diag(pcov))
         return popt, perr
@@ -121,7 +129,7 @@ class image():
         self.ySlice = None
         self.pixelSize = pixelSize
     
-    def openImage(self, fname, directory=d, fileType = 'png'):
+    def openImage(self, fname, directory=None, fileType = 'png'):
         """Can load the image from a file"""
         if directory != None:
             os.chdir(directory)
@@ -162,7 +170,8 @@ class image():
 
     def maxPixel(self):
         """Find the maximum pixel in the image"""
-        self.yc, self.xc = np.unravel_index(self.imvals.argmax(), self.imvals.shape)     
+        self.yc, self.xc = np.unravel_index(self.imvals.argmax(), self.imvals.shape)  
+
     def rotate_image(self,angle):
         self.imvals = ndimage.rotate(self.imvals,angle)
 
@@ -196,18 +205,23 @@ class profile():
         
         i = 0
         print(os.listdir(self.directory))
-        for filename in tqdm(os.listdir(self.directory)):
+        for filename in track(os.listdir(self.directory)):
             
             if filename[-4:] == '.png':
                 #print(filename)
                 # print("Pixel Size =",self.pixelSize*1e3,"um")
                 im = image(pixelSize=self.pixelSize)
-                im.openImage(filename)
+                im.openImage(filename,self.directory)
                 if crop_x!=None:
                     im.cropImage(crop_x,crop_y)
                 if angle!=None:
                     im.rotate_image(angle)
-                im.fitImage()
+                
+                try:
+                    im.fitImage()
+                except Exception as e:
+                    print("[red bold]Error: Unable to fit image due to {}, skipping".format(e))
+                    continue
                 #print(im.gx.w0)
                 if plot_all==True:
                     self.plotSingle(filename,crop_x=crop_x,crop_y=crop_y,angle=angle)
@@ -329,15 +343,15 @@ class profile():
         xopt = im.gx.applyFit(xth)
         yopt = im.gy.applyFit(yth)
         
-        #ax1 = plt.subplot2grid((6,6), (1,1), rowspan=5, colspan = 5)
-        #ax2 = plt.subplot2grid((6,6), (1,0), rowspan=5, colspan = 1)
-        #ax3 = plt.subplot2grid((6,6), (0, 1), rowspan=1, colspan = 5)
-        #plt.subplots_adjust(left = 0.27, right = 0.85)
-        # top gaussian
-       #ax3.plot(im.xpix, im.xInt)
+        # ax1 = plt.subplot2grid((6,6), (1,1), rowspan=5, colspan = 5)
+        # ax2 = plt.subplot2grid((6,6), (1,0), rowspan=5, colspan = 1)
+        # ax3 = plt.subplot2grid((6,6), (0, 1), rowspan=1, colspan = 5)
+        # plt.subplots_adjust(left = 0.27, right = 0.85)
+        # #top gaussian
+        # ax3.plot(im.xpix, im.xInt)
     
-       #ax3.xaxis.tick_top()
-        #ax3.set_xlabel('x / mm')
+        # ax3.xaxis.tick_top()
+        # ax3.set_xlabel('x / mm')
         # ax3.xaxis.set_label_position('top')
         # ax3.set_ylabel('Intensity')
         # ax3.set_yticks((0, np.around(np.around(np.max(im.xInt),-1)/2), np.around(np.max(im.xInt),-1)))
@@ -365,12 +379,12 @@ class profile():
         
         # ax1.yaxis.tick_right()
         
-        #ax1.legend(loc = 'upper left')
-        #print(self.MOTx0, self.xc)
-        #print(self.MOTy0, self.yc)
+        # ax1.legend(loc = 'upper left')
+        # # print(self.MOTx0, self.xc)
+        # # print(self.MOTy0, self.yc)
         
-        #if single == True:
-            #plt.show()
+        # if single == True:
+        #     plt.show()
             
         return im.yInt, im.xInt, im.xpix, im.ypix, xth, xopt, yth, yopt
     
