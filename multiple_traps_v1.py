@@ -13,7 +13,7 @@ from slm import SLM
 import time
 
 # CONFIGURATION
-X = [252, 256, 260]
+X = [236, 256, 276]
 Y = [256, 256, 256]
 
 
@@ -44,7 +44,7 @@ azimuthal_coords = [4,2,0,-2,-4,3,1,-1,-3,2,0,-2,1,-1,0]
 def main():
     #initialise classes
 
-    #camera = Camera(roi =[595,305,635,320])
+    #camera = Camera(roi =[595,305,635,320]) #ROI NEEDS UPDATED AS TRAP SPACING INCREASED
 
     # camera = Camera()
     # save_image = ImageHandler()
