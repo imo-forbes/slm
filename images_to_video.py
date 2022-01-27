@@ -2,7 +2,7 @@ import imageio
 import numpy as np
 from datetime import datetime
 
-amplitude_range= np.arange(-50, 50, 5)
+amplitude_range= np.arange(-1, 1, 0.1)
 
 images = []
 
@@ -11,4 +11,4 @@ for x in range(0,121,1):#(3*len(amplitude_range)+1),1):
     images.append(imageio.imread(d))
 
 #filename currently needs to be manually set
-imageio.mimsave(r"C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm\images\Animated Runs\15.11.21\Measure16.gif" , images)
+imageio.mimsave(r"C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm\images\Animated Runs\29.11.21Measure6.gif" , images)

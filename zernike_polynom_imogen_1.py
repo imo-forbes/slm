@@ -31,8 +31,8 @@ amplitude_range = np.arange(1, 100, 20)
 #amplitude_range = np.arange(0, 0.4, 0.002)
     
 #initialise classes            
-camera = Camera()
-save_image = ImageHandler()
+#camera = Camera()
+#save_image = ImageHandler()
 slm = SLM()
 
 #take background image before SLM set and save for analysis
