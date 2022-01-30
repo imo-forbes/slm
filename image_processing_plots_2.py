@@ -14,9 +14,9 @@ import os
 import csv
 
 #CONFIGURATION
-X_CROP = 100
-Y_CROP = 100
-amplitude_range = np.arange(-1,1,0.05)
+X_CROP = None
+Y_CROP = None 
+amplitude_range = np.arange(-0.5,0.5,0.05)
 images_in_set = len(amplitude_range)
 
 #create empty arrays for pixel values
@@ -29,7 +29,7 @@ amplitude_corrections_x =[]
 amplitude_corrections_y = []
 
 #measurement numbers to analyse
-measurements = np.arange(26,41,1)
+measurements = np.arange(42,44,1)
 
 
 
@@ -39,7 +39,7 @@ def main():
     
     for measure_value in measurements:
     #set path to where images are saved
-        path = r"C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm\images\2021\December\18\Measure {}".format(measure_value)
+        path = r"Z:\Tweezer\People\Imogen\GitHub\slm\images\2022\January\29\Measure {}".format(measure_value)
 
         #initialise profile class
         prof=profile(path)

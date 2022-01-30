@@ -8,8 +8,8 @@ from holograms.gratings import hori_gradient, hori
 from holograms.apertures import circ
 from holograms.arrays import aags
 from holograms.lenses import focal_plane_shift
-from beam_fitting_code import profile
-from beam_fitting_code import image
+# from beam_fitting_code import profile
+# from beam_fitting_code import image
 from camera import ImageHandler,Camera
 import matplotlib.pyplot as plt
 from slm import SLM
@@ -28,7 +28,7 @@ LENS_SHIFT = -3
 
 #set variables for run
 amplitude_range = np.arange(-1,1,0.05)
-exposure = 14
+exposure = 0.2
 repeat = 0 
 
 #path where images are saved for lens plot UPDATE!
@@ -36,16 +36,16 @@ path = r"C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm
 
 
 slm = SLM()
-#camera = Camera()
-#save_image = ImageHandler()
+camera = Camera()
+save_image = ImageHandler()
 
 #test a grating with varied period to ensure the first order is being imaged
 #this should move the position of the beam in the images. 
 def grating_test(gradient):
     
-    for gradient in range(gradient-10, gradient+10, 1):
+    for gradient in range(gradient-30, gradient+30, 5):
 
-        grating = hori_gradient(gradient=HORI_GRADIENT)
+        grating = hori_gradient(gradient)
 
         #apply hologram to SLM
         slm.apply_hologram(grating)
@@ -53,10 +53,10 @@ def grating_test(gradient):
         #pause to allow for grating to load
         time.sleep(0.5)
 
-        # #use camera class to take and save photos
-        # camera.update_exposure(exposure)
-        # image = camera.take_image()
-        # save_image.save(image)
+        #use camera class to take and save photos
+        camera.update_exposure(exposure)
+        image = camera.take_image()
+        save_image.save(image)
 
         # Sleep for 1 second to allow for side-effects
         # such as the camera releasing its handles
@@ -80,32 +80,32 @@ def in_focus(lens_shift):
         #pause to allow for grating to load
         time.sleep(0.5)
 
-        # #use camera class to take and save photos
-        # camera.update_exposure(exposure)
-        # image = camera.take_image()
-        # save_image.save(image)
+        #use camera class to take and save photos
+        camera.update_exposure(exposure)
+        image = camera.take_image()
+        save_image.save(image)
 
         # Sleep for 1 second to allow for side-effects
         # such as the camera releasing its handles
         # to the OS
         time.sleep(1)
 
-        #initialise profile class
-        prof=profile(path)
+        # #initialise profile class
+        # prof=profile(path)
 
-        #create empty arrays for pixel values
-        x_intensities=[]
-        y_intensities=[]
-        x_max_intensities=[]
-        y_max_intensities=[]
-        max_pixel=[]
+        # #create empty arrays for pixel values
+        # x_intensities=[]
+        # y_intensities=[]
+        # x_max_intensities=[]
+        # y_max_intensities=[]
+        # max_pixel=[]
 
-        #crop it and get beam radius
-        z, wx, wy = prof.analyseBeamProfile(path)
+        # #crop it and get beam radius
+        # z, wx, wy = prof.analyseBeamProfile(path)
 
-        plt.plot(range(lens_shift-10, lens_shift+10,1), wx)
-        plt.xlabel("Beam Radius in x")
-        plt.ylabel("Beam Radius in y")
+        # plt.plot(range(lens_shift-10, lens_shift+10,1), wx)
+        # plt.xlabel("Beam Radius in x")
+        # plt.ylabel("Beam Radius in y")
 
 
 #Takes a single image of three traps so ROI can be checked. 
@@ -124,16 +124,16 @@ def three_trap_ROI(X,Y):
     time.sleep(0.5)
 
         # #use camera class to take and save photos
-        # camera.update_exposure(exposure)
-        # image = camera.take_image()
-        # save_image.save(image)
+    camera.update_exposure(exposure)
+    image = camera.take_image()
+    save_image.save(image)
 
         # Sleep for 1 second to allow for side-effects
         # such as the camera releasing its handles
         # to the OS
     time.sleep(1)
 
-three_trap_ROI(X = [236, 256, 276], Y = [256, 256, 256])
+in_focus(-3)
 
 
 
