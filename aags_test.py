@@ -1,18 +1,11 @@
-"""Implements an adaptive additive Gerchberg Saxton algorithm as detailed in
-https://arxiv.org/abs/1903.09286 to form an array of Gaussian traps.
-"""
-
 import numpy as np
 from scipy.fft import fft2,ifft2,fftshift,ifftshift
 
-# from rich.progress import track
-
-def aags(traps='(256,256),(260,256),(256,260),(260,260)',iterations=20,
+def aags(traps='(256,256),(260,256),(256,260),(260,260)',iterations=4,
          beam_waist=None,beam_center=(256,256),shape=(512,512)):#,circ_aper_center=None,):
     """
     Calculates an adaptive additive Gerchberg Saxton hologram which creates 
     an array of Gaussian traps.
-
     Parameters
     ----------
     traps: list of tuple of int
@@ -49,6 +42,7 @@ def aags(traps='(256,256),(260,256),(256,260),(260,260)',iterations=20,
     if circ_aper_center is not None:
         input_intensity = circ(input_intensity,circ_aper_center[0],circ_aper_center[1])
     phi = (np.random.rand(*shape))*2*np.pi
+    print(phi)
 
     N = len(traps)
     print('generating {} traps'.format(N))
@@ -62,6 +56,8 @@ def aags(traps='(256,256),(260,256),(256,260),(260,260)',iterations=20,
         u_plane = fftshift(fft2(np.sqrt(input_intensity)*np.exp(1j*phi)))
         B = np.abs(u_plane)
         psi = np.angle(u_plane)
+        plt.pcolor(psi)
+        plt.show()
         
         if i == N:
             psi_N = psi
@@ -73,7 +69,7 @@ def aags(traps='(256,256),(260,256),(256,260),(260,260)',iterations=20,
         B_N = 0
         for trap in traps:
             B_N += B[trap]
-            # print(trap,B[trap])
+            print(trap,B[trap])
         B_N /= N
         
         g = np.zeros(shape)
@@ -82,16 +78,17 @@ def aags(traps='(256,256),(260,256),(256,260),(260,260)',iterations=20,
         B = T*g
         prev_g = g
         
+        
         x_plane = ifft2(ifftshift(B * np.exp(1j*psi)))
         A = np.abs(x_plane)
         phi = np.angle(x_plane)
+        print('phi =' + str((phi%(2*np.pi))/2/np.pi))
 
-    return (phi%(2*np.pi))/2/np.pi
+    return phi%(2*np.pi)/2/np.pi
 
 def generate_input_intensity(waist=None,center=None,shape=(512,512)):
         """Defines the Gaussian intensity incident onto the SLM and stores it 
         as a parameter.
-
         Parameters
         ----------
         waist : float, optional
@@ -100,7 +97,6 @@ def generate_input_intensity(waist=None,center=None,shape=(512,512)):
         center : tuple of float, optional
             The center of the beam, in SLM pixels. if center is None, the beam 
             is centered on the SLM.
-
         Returns
         -------
         array
@@ -125,10 +121,10 @@ if __name__ == '__main__':
     import sys
     from os import path
     sys.path.append(path.dirname(path.abspath(__file__)))
-    from apertures import circ
+    from holograms.apertures import circ
 
-    traps = [(256,256),(260,260),(256,260),(260,256)]
-    holo = aags(traps,input_waist=210)
+    traps = [(256,256),(260,256),(256,260),(260,260)]
+    holo = aags(traps)
     plt.pcolor(holo)
     plt.colorbar()
     plt.show()

@@ -74,7 +74,7 @@ def main():
         shape = SLM_SHAPE)
 
     #Sum holograms together
-    final_holo_sum = lens  + hor_grating_1 + hor_grating_2 + zernike_holo
+    final_holo_sum =  hor_grating_1 + hor_grating_2 + zernike_holo + lens
 
     #apply aperture
     final_holo_aperture = circ(final_holo_sum, x0= X0, y0= Y0, radius = APERTURE_RADIUS)

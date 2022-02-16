@@ -13,8 +13,8 @@ from slm import SLM
 import time
 
 # CONFIGURATION
-X = [236, 256, 276, 236, 256, 276, 236, 256, 276]
-Y = [256, 256, 256, 236, 236, 236, 276, 276, 276]
+X = [256,251,246,241,261,266,271,251,261,256]
+Y = [256,251,246,241,251,246,241,246,246,246]
 
 
 X0 = 233
@@ -31,12 +31,12 @@ VERT_GRADIENT= 6.98
 #set variables for run
 amplitude_range = np.arange(-0.5,0.5,0.1)
 
-exposure = 0.75
+exposure = 1.5
 repeat = 0 
 
 #set polynomials to loop through. r is radial coord, a is azimuthal 
-radial_coords = [4,4,4,4,4,3,3,3,3,2,2,2,1,1,0]
-azimuthal_coords = [4,2,0,-2,-4,3,1,-1,-3,2,0,-2,1,-1,0]
+radial_coords = [4,4]
+azimuthal_coords = [4,4]
 
 
 # END CONFIGURATION
@@ -56,7 +56,7 @@ def main():
 
     #run algorithm to set trap locations 
     
-    trap_hologram = aags(traps = ((X[0],Y[0]), (X[1],Y[1]),(X[2],Y[2]), (X[3],Y[3]), (X[4],Y[4]),(X[5],Y[5]), (X[6],Y[6]), (X[7],Y[7]), (X[8],Y[8])),
+    trap_hologram = aags(traps = ((X[0],Y[0]),(X[1],Y[1]),(X[2],Y[2]), (X[3],Y[3]), (X[4],Y[4]),(X[5],Y[5]), (X[6],Y[6]), (X[7],Y[7]), (X[8],Y[8]), (X[9],Y[9])), #(X[10], Y[10])),
                         iterations=30, #must be greater than no. of traps
                         beam_waist=None,
                         beam_center=(256,256),
@@ -87,7 +87,7 @@ def main():
         save_image.save(background_image)
 
         #loop to take three sets of images for averaging
-        for repeat in range(0,3,1):
+        for repeat in range(0,1,1):
 
             #loop through amplitude range
             for amplitude in amplitude_range:

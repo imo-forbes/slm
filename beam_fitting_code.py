@@ -66,7 +66,7 @@ class Gaussian:
         
         p0 = [(np.max(self.y)-np.min(self.y)),self.x[np.argmax(self.y)], e2_width, np.min(self.y)]
         
-        popt,pcov = curve_fit(self.f,self.x,self.y,p0=p0, maxfev=int(1e6))    
+        popt,pcov = curve_fit(self.f,self.x,self.y,p0=p0, maxfev=int(1e8))    
    
         perr = np.sqrt(np.diag(pcov))
         return popt, perr

@@ -19,7 +19,8 @@ plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
 r = [4,4,4,4,4,3,3,3,3,2,2,]
 a = [4,2,0,-2,-4,3,1,-1,-3,2,-2]
-amplitude = [0.15000000000000102, 8.881784197001252e-16, -0.0999999999999992, -0.049999999999999156, 8.881784197001252e-16, -0.049999999999999156, -0.049999999999999156, -0.0999999999999992, 8.881784197001252e-16, 0.05000000000000093, 8.881784197001252e-16, ]
+amplitude = [0.5,0.4,-0.23,0.03,0,-0.2,0.3,0.07,-0.07,-0.33,0]
+#[0.15000000000000102, 8.881784197001252e-16, -0.0999999999999992, -0.049999999999999156, 8.881784197001252e-16, -0.049999999999999156, -0.049999999999999156, -0.0999999999999992, 8.881784197001252e-16, 0.05000000000000093, 8.881784197001252e-16, ]
 
 import matplotlib
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
@@ -53,5 +54,5 @@ plt.rcParams.update(params)
 plt.pcolor(zernike_holo, cmap='viridis')
 cb = plt.colorbar(label='Normalized Phase Change / $\mathrm{\pi}$ rads')
 cb.set_label('Normalized Phase Change / $\mathrm{\pi}$ rads', color="white")
-fig.savefig('seminar_colormap.png', transparent=True)
+fig.savefig('images_for_seminar/seminar_colormap.png', transparent=True)
 plt.show()

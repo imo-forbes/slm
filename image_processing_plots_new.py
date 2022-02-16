@@ -26,7 +26,7 @@ print(amplitude_range)
 #file images are being taken from
 range_to_fit_start = 10
 range_to_fit_end = 35
-path = r"C:\Users\imoge\OneDrive\Documents\Fourth Year\Project\Imogen\GitHub\slm\images\2021\December\18\Measure 48"
+path = r"Z:\Tweezer\People\Imogen\GitHub\slm\images\2021\December\18\Measure 48"
 profile=profile(path)
 
 #collect beam radius arrays from images
@@ -53,7 +53,7 @@ x_max_intensities=[]
 y_max_intensities=[]
 max_pixel=[]
 
-for x in range(0,(4),1):
+for x in range(0,3*len(amplitude_range)+1,1):
     d =  path + "/{}.png". format(x)
     yInt, xInt, xpix, ypix, xth, xopt, yth, yopt = profile.plotSingle(d, crop_x=100, crop_y=100)
 
@@ -149,6 +149,7 @@ for std_err in wy_standard_err:
     wy_err_plot.append(wy_err_in_quad)
 
 print('Difference', np.max(wy_average) - np.min(wy_average))
+print('Beam radius at zero' + str(wx_average[20]))
 
 #repeats and averaging intensities
 x_max_intensity_1 = np.array(x_max_intensities[1:(images_in_set+1)])
@@ -226,20 +227,20 @@ plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
 main_plot_ax = fig .add_subplot(gs[:-2, :-1])
-x_res_ax = fig.add_subplot(gs[-2, :-1])
-y_res_ax = fig.add_subplot(gs[-1, :-1])
-#x_hist_ax = fig.add_subplot(gs[-2, -1])
-#y_hist_ax = fig.add_subplot(gs[-1, -1])
+# x_res_ax = fig.add_subplot(gs[-2, :-1])
+# y_res_ax = fig.add_subplot(gs[-1, :-1])
+# #x_hist_ax = fig.add_subplot(gs[-2, -1])
+# #y_hist_ax = fig.add_subplot(gs[-1, -1])
 
-#x_hist_ax.get_yaxis().set_visible(False)
-#y_hist_ax.get_yaxis().set_visible(False)
-#x_hist_ax.get_xaxis().set_visible(False)
-#y_hist_ax.get_xaxis().set_visible(False)
-residual_y_lim = (-6, 7)
+# #x_hist_ax.get_yaxis().set_visible(False)
+# #y_hist_ax.get_yaxis().set_visible(False)
+# #x_hist_ax.get_xaxis().set_visible(False)
+# #y_hist_ax.get_xaxis().set_visible(False)
+# residual_y_lim = (-6, 7)
 
-x_res_ax.set_ylim(residual_y_lim)
+# x_res_ax.set_ylim(residual_y_lim)
 
-y_res_ax.set_ylim(residual_y_lim)
+# y_res_ax.set_ylim(residual_y_lim)
 # x_res_ax.set_yticks([-5, 0,5])
 # y_res_ax.set_yticks([-5, 0,5])
 
@@ -249,67 +250,68 @@ main_plot_ax.spines['top'].set_color('white')
 main_plot_ax.spines['right'].set_color('white')
 main_plot_ax.spines['left'].set_color('white')
 
-x_res_ax.spines['bottom'].set_color('white')
-x_res_ax.spines['top'].set_color('white') 
-x_res_ax.spines['right'].set_color('white')
-x_res_ax.spines['left'].set_color('white')
+# x_res_ax.spines['bottom'].set_color('white')
+# x_res_ax.spines['top'].set_color('white') 
+# x_res_ax.spines['right'].set_color('white')
+# x_res_ax.spines['left'].set_color('white')
 
-y_res_ax.spines['bottom'].set_color('white')
-y_res_ax.spines['top'].set_color('white') 
-y_res_ax.spines['right'].set_color('white')
-y_res_ax.spines['left'].set_color('white')
+# y_res_ax.spines['bottom'].set_color('white')
+# y_res_ax.spines['top'].set_color('white') 
+# y_res_ax.spines['right'].set_color('white')
+# y_res_ax.spines['left'].set_color('white')
 
 main_plot_ax.tick_params(axis='x', colors='white')
 main_plot_ax.tick_params(axis='y', colors='white')
 main_plot_ax.yaxis.label.set_color('white')
-#main_plot_ax.xaxis.label.set_color('white')
+main_plot_ax.xaxis.label.set_color('white')
 
-x_res_ax.tick_params(axis='x', colors='white')
-x_res_ax.tick_params(axis='y', colors='white')
-x_res_ax.yaxis.label.set_color('white')
-x_res_ax.xaxis.label.set_color('white')
+# x_res_ax.tick_params(axis='x', colors='white')
+# x_res_ax.tick_params(axis='y', colors='white')
+# x_res_ax.yaxis.label.set_color('white')
+# x_res_ax.xaxis.label.set_color('white')
 
-y_res_ax.tick_params(axis='x', colors='white')
-y_res_ax.tick_params(axis='y', colors='white')
-y_res_ax.yaxis.label.set_color('white')
-y_res_ax.xaxis.label.set_color('white')
+# y_res_ax.tick_params(axis='x', colors='white')
+# y_res_ax.tick_params(axis='y', colors='white')
+# y_res_ax.yaxis.label.set_color('white')
+# y_res_ax.xaxis.label.set_color('white')
 
 
 
 #fitting gaussians
-main_plot_ax.plot(amplitude_range[range_to_fit_start:range_to_fit_end]*1000,gaus(amplitude_range[range_to_fit_start:range_to_fit_end]*1000, *popt_x),label='Gaussian fit for beam waist in x', color = "#FDE725")#3b528b")
-main_plot_ax.plot(amplitude_range[range_to_fit_start:range_to_fit_end]*1000,gaus(amplitude_range[range_to_fit_start:range_to_fit_end]*1000, *popt_y),label='Gaussian fit for beam waist in y', color = "#5ec962")
-main_plot_ax.errorbar(amplitude_range[range_to_fit_start:range_to_fit_end]*1000, wx_average[range_to_fit_start:range_to_fit_end], yerr=wx_err_plot[range_to_fit_start:range_to_fit_end], marker='o', linestyle='', label='Beam waist in x', color="#FDE725")#3b528b")
-main_plot_ax.errorbar(amplitude_range[range_to_fit_start:range_to_fit_end]*1000, wy_average[range_to_fit_start:range_to_fit_end], yerr=wy_err_plot[range_to_fit_start:range_to_fit_end], marker='o', linestyle='',  label= 'Beam waist in y', color='#5ec962')
-main_plot_ax.set_ylabel('Beam $\\frac{1}{e^2} $ waist / mm')
-#main_plot_ax.set_xlabel('Amplitude / Milliwaves')
+main_plot_ax.plot(amplitude_range[range_to_fit_start:range_to_fit_end]*1000,np.array(gaus(amplitude_range[range_to_fit_start:range_to_fit_end]*1000, *popt_x))*1000,label='Gaussian fit for beam waist in x', color = "#FDE725")#3b528b")
+main_plot_ax.plot(amplitude_range[range_to_fit_start:range_to_fit_end]*1000,np.array(gaus(amplitude_range[range_to_fit_start:range_to_fit_end]*1000, *popt_y))*1000,label='Gaussian fit for beam waist in y', color = "#5ec962")
+main_plot_ax.errorbar(amplitude_range[range_to_fit_start:range_to_fit_end]*1000, np.array(wx_average[range_to_fit_start:range_to_fit_end])*1000, yerr=np.array(wx_err_plot[range_to_fit_start:range_to_fit_end])*1000, marker='o', linestyle='', label='Beam waist in x', color="#FDE725")#3b528b")
+main_plot_ax.errorbar(amplitude_range[range_to_fit_start:range_to_fit_end]*1000, np.array(wy_average[range_to_fit_start:range_to_fit_end])*1000, yerr=np.array(wy_err_plot[range_to_fit_start:range_to_fit_end])*1000, marker='o', linestyle='',  label= 'Beam waist in y', color='#5ec962')
+main_plot_ax.set_ylabel('Beam $\\frac{1}{e^2} $ waist / $\\mu$m')
+main_plot_ax.set_xlabel('Amplitude / Milliwaves')
 legend = main_plot_ax.legend()
 plt.setp(legend.get_texts(), color='w')
 legend.get_frame().set_alpha(None)
 legend.get_frame().set_facecolor((0,0,0,0))
 
 
+
 #normalised residuals
-x_norm_residuals=[]
-y_norm_residuals=[]
+# x_norm_residuals=[]
+# y_norm_residuals=[]
 
-x_norm_residuals = (wx_average - gaus(amplitude_range*1000,*popt_x))/wx_err_plot
-y_norm_residuals = (wy_average - gaus(amplitude_range*1000,*popt_y))/wy_err_plot
+# x_norm_residuals = (wx_average - gaus(amplitude_range*1000,*popt_x))/wx_err_plot
+# y_norm_residuals = (wy_average - gaus(amplitude_range*1000,*popt_y))/wy_err_plot
 
-x_res_ax.scatter(amplitude_range[range_to_fit_start:range_to_fit_end]*1000, x_norm_residuals[range_to_fit_start:range_to_fit_end], color="#FDE725", marker='x')
-#x_res_ax.stem(amplitude_range*1000, x_norm_residuals, linefmt=None, markerfmt='x',basefmt="k")
-y_res_ax.scatter(amplitude_range[range_to_fit_start:range_to_fit_end]*1000, y_norm_residuals[range_to_fit_start:range_to_fit_end], color='#5ec962', marker='x')
-#y_res_ax.stem(amplitude_range*1000, y_norm_residuals, linefmt='C1', markerfmt='C1x', basefmt='k')
-x_res_ax.axhline(y=0, c='w' )
-y_res_ax.axhline(y=0, c='w')
-x_res_ax.axhspan(ymin=1, ymax=-1, xmin=0, xmax=1, color='#440154', alpha=0.15)
-y_res_ax.axhspan(ymin=1, ymax=-1, xmin=0, xmax=1, color='#440154', alpha=0.15)
-#y_res_ax.set_xlabel('Milliwaves')
-y_res_ax.set_xlabel('Amplitude / Milliwaves')
+# x_res_ax.scatter(amplitude_range[range_to_fit_start:range_to_fit_end]*1000, x_norm_residuals[range_to_fit_start:range_to_fit_end], color="#FDE725", marker='x')
+# #x_res_ax.stem(amplitude_range*1000, x_norm_residuals, linefmt=None, markerfmt='x',basefmt="k")
+# y_res_ax.scatter(amplitude_range[range_to_fit_start:range_to_fit_end]*1000, y_norm_residuals[range_to_fit_start:range_to_fit_end], color='#5ec962', marker='x')
+# #y_res_ax.stem(amplitude_range*1000, y_norm_residuals, linefmt='C1', markerfmt='C1x', basefmt='k')
+# x_res_ax.axhline(y=0, c='k' )
+# y_res_ax.axhline(y=0, c='k')
+# x_res_ax.axhspan(ymin=1, ymax=-1, xmin=0, xmax=1, color='#440154', alpha=0.15)
+# y_res_ax.axhspan(ymin=1, ymax=-1, xmin=0, xmax=1, color='#440154', alpha=0.15)
+# #y_res_ax.set_xlabel('Milliwaves')
+# y_res_ax.set_xlabel('Amplitude / Milliwaves')
 
 
 
-plt.text(-0.12, -0.1, "Norm. Residuals",color='white', verticalalignment="center", horizontalalignment="center", transform=x_res_ax.transAxes, rotation=90)
+#plt.text(-0.12, -0.1, "Norm. Residuals",color='white', verticalalignment="center", horizontalalignment="center", transform=x_res_ax.transAxes, rotation=90)
 
 #plot histogram
 #x_hist_ax.hist(x_norm_residuals, np.linspace(-1,1,8), orientation = 'horizontal', color='blue')
@@ -332,10 +334,10 @@ print(amplitude_range[z_y]*1000)
 
 
 
-plt.figure()
-plt.scatter(range(0, len(amplitude_range)),max_pixel[0:len(amplitude_range)])
-plt.xlabel('Image Number')
-plt.ylabel('Value of Maximum Pixel in Image')
+# plt.figure()
+# plt.scatter(range(0, len(amplitude_range)),max_pixel[0:len(amplitude_range)])
+# plt.xlabel('Image Number')
+# plt.ylabel('Value of Maximum Pixel in Image')
 
 
 
@@ -426,6 +428,6 @@ legend.get_frame().set_facecolor((0,0,0,0))
 # print(amplitude_range[36])
 
 
-fig.savefig('seminar2.png', transparent=True)
+
 
 plt.show()
