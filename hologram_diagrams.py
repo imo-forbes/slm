@@ -8,6 +8,7 @@ from matplotlib import gridspec
 from holograms.mixing import mix
 import matplotlib.pyplot as plt
 from slm import SLM
+import matplotlib
 
 
 X = [236, 256, 276, 236, 256, 276, 236, 256, 276]

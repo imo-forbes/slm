@@ -11,10 +11,11 @@ from camera import ImageHandler,Camera
 import matplotlib.pyplot as plt
 from slm import SLM
 import time
+import cv2
 
 # CONFIGURATION
-X = [236, 256, 276, 236, 256, 276, 236, 256, 276]
-Y = [256, 256, 256, 236, 236, 236, 276, 276, 276]
+X = [236, 256, 276, 236, 256, 276, 236, 256,  236]
+Y = [256, 256, 256, 236, 236, 236, 276, 276,  296]
 
 
 X0 = 233
@@ -31,7 +32,7 @@ VERT_GRADIENT= 6.98
 #set variables for run
 amplitude_range = np.arange(-0.5,0.5,0.1)
 
-exposure = 0.75
+exposure = 100
 repeat = 0 
 
 #set polynomials to loop through. r is radial coord, a is azimuthal 
@@ -55,9 +56,9 @@ def main():
     assert len(radial_coords) == len(azimuthal_coords), "Radial and azimuthal coords should have same length"
 
     #run algorithm to set trap locations 
-    
-    trap_hologram = aags(traps = ((X[0],Y[0]), (X[1],Y[1]),(X[2],Y[2]), (X[3],Y[3]), (X[4],Y[4]),(X[5],Y[5]), (X[6],Y[6]), (X[7],Y[7]), (X[8],Y[8])),
-                        iterations=30, #must be greater than no. of traps
+    trap_locations = [(271, 256), (270, 257), (270, 258), (269, 259), (268, 260), (257, 261), (259, 261), (261, 261), (263, 261), (265, 261), (267, 261), (269, 261), (285, 261), (287, 261), (289, 261), (291, 261), (293, 261), (256, 262), (270, 262), (308, 262), (321, 262), (285, 263), (256, 264), (266, 264), (270, 264), (308, 264), (321, 264), (285, 265), (256, 266), (270, 266), (308, 266), (321, 266), (285, 267), (256, 268), (270, 268), (308, 268), (321, 268), (285, 269), (270, 270), (308, 270), (321, 270), (256, 271), (285, 271), (315, 271), (270, 272), (308, 272), (321, 272), (257, 273), (259, 273), (261, 273), (263, 273), (265, 273), (267, 273), (269, 273), (285, 273), (315, 273), (308, 274), (310, 274), (312, 274), (314, 274), (316, 274), (319, 274), (321, 274)]
+    trap_hologram = aags(traps = trap_locations,#((X[0],Y[0]), (X[1],Y[1]),(X[2],Y[2]), (X[3],Y[3]), (X[4],Y[4]),(X[5],Y[5]), (X[6],Y[6]), (X[7],Y[7]), (X[8],Y[8])),#, (X[9],Y[9]), (X[10],Y[10])),#,(X[11],Y[11]), (X[12],Y[12]), (X[13],Y[13]),(X[14],Y[14])),
+                        iterations=120, #must be greater than no. of traps
                         beam_waist=None,
                         beam_center=(256,256),
                         shape=(512,512)) 
@@ -78,7 +79,7 @@ def main():
 
     for radial,azimuthal in zip(radial_coords, azimuthal_coords):
         
-        camera = Camera(roi =[680,509,784,611]) #xmin,ymin,xmax,ymax
+        camera = Camera()#(roi =[680,509,784,611]) #xmin,ymin,xmax,ymax
         save_image = ImageHandler()
 
         #take image 0 as background image for comparison

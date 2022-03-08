@@ -45,9 +45,9 @@ def load_traps_from_image(filename,scale=1,shape=(512,512)):
     return traps
 
 if __name__ == '__main__':
-    scale = 3
+    scale = 1
     shape = (512,512)
-    traps = load_traps_from_image('RbCs.png',scale,shape)
+    traps = load_traps_from_image(r'Z:\Tweezer\People\Imogen\GitHub\slm\images_for_seminar\slm.png',scale,shape)
     print(traps)
     print(len(traps))
     array = np.zeros(shape)

@@ -136,4 +136,7 @@ dmypy.json
 
 # Remove stack dump
 *.stackdump
-images_for_seminar/QLM_group B&W.jpg
+
+images_for_seminar/
+zernike_decomp_tests/
+

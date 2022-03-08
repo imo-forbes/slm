@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tck
 import pandas as pd
-
+from holograms.arrays import aags
 import holograms as hg
 
 import matplotlib as mpl
@@ -10,53 +10,60 @@ mpl.rcParams['figure.dpi'] = 300
 
 center = (288,227)
 radius = 210
-ones = np.ones((512,512))
-ones = hg.apertures.circ(ones,center,radius)
-num_pixels = np.count_nonzero(ones)
+# ones = np.ones((512,512))
+# ones = hg.apertures.circ(ones,center,radius)
+# num_pixels = np.count_nonzero(ones)
 
-zernike = hg.zernike(0,0,1,center,radius,wrap_phase=False)
+#zernike = hg.zernike(0,0,1,center,radius,wrap_phase=False)
+X = [236,256,276, 256]
+Y = [256,256,256, 236]
 
-correction = hg.misc.load(r"Z:\Tweezer\Code\Python 3.7\slm\phase_correction.png")
+
+correction = hg.zernike(2,2,0.5,center[0], center[1], radius) + hg.zernike(4,2,0.4,center[0], center[1], radius) + hg.zernike(3,1,0.5,center[0], center[1], radius)
+#aags(traps = ((X[0],Y[0]), (X[1], Y[1]), (X[2], Y[2])),iterations=30,beam_waist=None,beam_center=(288,227),shape=(512,512))
+
+#
+#hg.misc.load(r"Z:\Tweezer\People\Imogen\GitHub\slm\zernike_phase_correction.png")
 shifted_correction = np.where(correction>0.5,correction-1,correction)
 
-cmap='twilight_shifted'
-#cmap='coolwarm'
-fig,ax1 = plt.subplots(1,1)
-fig.set_dpi(300)
-pcm = ax1.imshow(zernike,cmap=cmap,interpolation='nearest',vmin=-1,vmax=1)
-ax1.axis('off')
-fig.tight_layout()
-cbar = fig.colorbar(pcm,ax=ax1,ticks=[0,0.5,1],label='phase')
-cbar.ax.set_yticklabels(['0','$\pi$',r'$2\pi$'])
-plt.show()
+# cmap='twilight_shifted'
+# #cmap='coolwarm'
+# fig,ax1 = plt.subplots(1,1)
+# fig.set_dpi(300)
+# pcm = ax1.imshow(zernike,cmap=cmap,interpolation='nearest',vmin=-1,vmax=1)
+# ax1.axis('off')
+# fig.tight_layout()
+# cbar = fig.colorbar(pcm,ax=ax1,ticks=[0,0.5,1],label='phase')
+# cbar.ax.set_yticklabels(['0','$\pi$',r'$2\pi$'])
+# plt.show()
 
-fig,ax1 = plt.subplots(1,1)
-fig.set_dpi(300)
-pcm = ax1.imshow(correction,cmap=cmap,interpolation='nearest',vmin=0,vmax=1)
-ax1.axis('off')
-fig.tight_layout()
-cbar = fig.colorbar(pcm,ax=ax1,ticks=[0,0.5,1],label='phase')
-cbar.ax.set_yticklabels(['0','$\pi$','$2\pi$'])
-plt.show()
+# fig,ax1 = plt.subplots(1,1)
+# fig.set_dpi(300)
+# pcm = ax1.imshow(correction,cmap=cmap,interpolation='nearest',vmin=0,vmax=1)
+# ax1.axis('off')
+# fig.tight_layout()
+# cbar = fig.colorbar(pcm,ax=ax1,ticks=[0,0.5,1],label='phase')
+# cbar.ax.set_yticklabels(['0','$\pi$','$2\pi$'])
+# plt.show()
 
-cmap='twilight_r'
-fig,ax1 = plt.subplots(1,1)
-fig.set_dpi(300)
-pcm = ax1.imshow(shifted_correction,cmap=cmap,interpolation='nearest',vmin=-0.5,vmax=0.5)
-ax1.axis('off')
-fig.tight_layout()
-cbar = fig.colorbar(pcm,ax=ax1,ticks=[-0.5,0,0.5],label='phase')
-cbar.ax.set_yticklabels(['$-\pi$','0','$\pi$'])
-plt.show()
+# cmap='twilight_r'
+# fig,ax1 = plt.subplots(1,1)
+# fig.set_dpi(300)
+# pcm = ax1.imshow(shifted_correction,cmap=cmap,interpolation='nearest',vmin=-0.5,vmax=0.5)
+# ax1.axis('off')
+# fig.tight_layout()
+# cbar = fig.colorbar(pcm,ax=ax1,ticks=[-0.5,0,0.5],label='phase')
+# cbar.ax.set_yticklabels(['$-\pi$','0','$\pi$'])
+# plt.show()
 
-cmap='coolwarm'
-fig,ax1 = plt.subplots(1,1)
-fig.set_dpi(300)
-pcm = ax1.imshow(zernike*shifted_correction,cmap=cmap,interpolation='nearest')
-ax1.axis('off')
-fig.tight_layout()
-cbar = fig.colorbar(pcm,ax=ax1)
-plt.show()
+# cmap='coolwarm'
+# fig,ax1 = plt.subplots(1,1)
+# fig.set_dpi(300)
+# pcm = ax1.imshow(zernike*shifted_correction,cmap=cmap,interpolation='nearest')
+# ax1.axis('off')
+# fig.tight_layout()
+# cbar = fig.colorbar(pcm,ax=ax1)
+# plt.show()
 
 #%%
 reconstructed = np.zeros_like(shifted_correction)
@@ -70,15 +77,15 @@ coeffs = []
 fit_coeffs = [0,0,0,0,0.063,-0.048,0,0,0,-0.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 std = []
 
-for radial in range(7):
+for radial in range(5):
     for azimuthal in np.arange(-radial,radial+2,2):
         results_row = pd.DataFrame()
         results_row.loc[0,'zernike_radial'] = radial
         results_row.loc[0,'zernike_azimuthal'] = azimuthal
-        zernike = hg.zernike(radial,azimuthal,1,center,radius,wrap_phase=False)
+        zernike = hg.zernike(radial,azimuthal,1,center[0],center[1],radius)#wrap_phase=False)
         contrib = shifted_correction*zernike
         coeff = np.sum(shifted_correction*zernike)/np.sum(zernike**2)
-        reconstructed += hg.zernike(radial,azimuthal,coeff,center,radius,wrap_phase=False)
+        reconstructed += hg.zernike(radial,azimuthal,coeff,center[0], center[1],radius)#,wrap_phase=False)
         print(radial,azimuthal,coeff)
         plot_strs.append('({},{})'.format(radial,azimuthal))
         coeffs.append(coeff)
@@ -86,7 +93,10 @@ for radial in range(7):
         results_row.loc[0,'fit_amp'] = coeff
         results_df = results_df.append(results_row)
         
-results_df.to_csv(r'Z:\Tweezer\Code\Python 3.7\slm\images\2021\May\25\zernike_measurements\phase_image_fit.csv',index=False)
+import time
+timestr = time.strftime("%Y%m%d-%H%M%S")
+
+results_df.to_csv(r'Z:\Tweezer\People\Imogen\GitHub\slm\zernike_decomp_tests\{}.csv'.format(timestr), index = False)
         
 
 cmap='twilight_r'
@@ -100,13 +110,13 @@ ax0.set_title('measured')
 pcm = ax1.imshow(reconstructed,cmap=cmap,interpolation='nearest',vmin=-0.5,vmax=0.5)
 ax1.axis('off')
 pcm = ax2.imshow(reconstructed-shifted_correction,cmap=cmap,interpolation='nearest',vmin=-0.5,vmax=0.5)
-ax1.set_title(r'fit $n\leq 10$')
+ax1.set_title(r'fit') #$n\leq 10$')
 ax2.axis('off')
 ax2.set_title('fit $-$ measured')
 fig.tight_layout()
 cbar = fig.colorbar(pcm,ax=axs,ticks=[-0.5,0,0.5],label='phase',shrink=0.6**2)
 cbar.ax.set_yticklabels(['$-\pi$','0','$\pi$'])
-fig.suptitle('Fitting phase map with Zernike polynomials',y=0.8)
+#fig.suptitle('Fitting phase map with Zernike polynomials',y=0.8)
 plt.show()
 
 x_pos = [i for i, _ in enumerate(plot_strs)]

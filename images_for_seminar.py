@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from slm import SLM
 import time
 import cv2
+import sys
 
 
 # import numpy as np
@@ -49,7 +50,7 @@ LENS_SHIFT = 4
 VERT_GRADIENT= 6.98
 
 
-exposure = 0.5
+exposure = 200
 repeat = 0 
 
 
@@ -60,41 +61,44 @@ repeat = 0
 def main():
     #initialise classes
 
-    #camera = Camera(roi =[595,305,635,320]) #ROI NEEDS UPDATED AS TRAP SPACING INCREASED
+    # #camera = Camera(roi =[595,305,635,320]) #ROI NEEDS UPDATED AS TRAP SPACING INCREASED
 
-    camera = Camera()
-    save_image = ImageHandler()
+    # camera = Camera()
+    # save_image = ImageHandler()
 
-    # read the image file
-    img = cv2.imread(r"Z:\Tweezer\People\Imogen\GitHub\slm\images_for_seminar\QLM_group B&W.jpg", cv2.IMREAD_COLOR)
+    # # read the image file
+    # img = cv2.imread(r"Z:\Tweezer\People\Imogen\GitHub\slm\arrays\alien.png", cv2.IMREAD_COLOR)
 
 
-    img = cv2.resize(img, (50,50))
+    # img = cv2.resize(img, (2,2))
     
-    ret, bw_img = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    # ret, bw_img = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
     
-    # converting to its binary form
-    # bw = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    # # converting to its binary form
+    # # bw = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
     
-    # cv2.imshow("Binary", bw_img)
-    # cv2.waitKey(0)
-    # bw_img is an binary image made of pixels with either
-    # 0 (black) or 255 (White)
+    # # cv2.imshow("Binary", bw_img)
+    # # cv2.waitKey(0)
+    # # bw_img is an binary image made of pixels with either
+    # # 0 (black) or 255 (White)
 
-    # get non transparent pixels (black)
-    non_transparent = np.argwhere(bw_img == 0)
+    # # get non transparent pixels (black)
+    # non_transparent = np.argwhere(bw_img == 255)
 
-    trap_locations = non_transparent
-    print(trap_locations)
-    print(len(trap_locations))
+    # trap_locations = non_transparent
+    # print(trap_locations)
+    # print(len(trap_locations))
 
-    
+    trap_locations = [(236, 256), (256, 256), (276, 256)]
   
-    # trap_hologram = aags(traps=trap_locations,
-    #                     iterations=2*len(trap_locations), #must be greater than no. of traps
-    #                     beam_waist=None,
-    #                     beam_center=(256,256),
-    #                     shape=(512,512))
+    trap_hologram = aags(traps=trap_locations,
+                        iterations=2*len(trap_locations), #must be greater than no. of traps
+                        beam_waist=None,
+                        beam_center=(256,256),
+                        shape=(512,512))
+
+    np.set_printoptions(threshold=sys.maxsize)
+    print(trap_hologram)
 
     # #grating and lens for sum
     # hor_grating_1 = hori_gradient(gradient=HORI_GRADIENT)
@@ -103,20 +107,20 @@ def main():
     # lens = focal_plane_shift(
     #                 shift=LENS_SHIFT,
     #                 x0=X0,
-    #                 y0=Y0,
-    #                 wavelength=WAVELENGTH,
-    #                 pixel_size=SLM_PIXEL_SIZE,
-    #                 shape=SLM_SHAPE) 
+    # #                 y0=Y0,
+    # #                 wavelength=WAVELENGTH,
+    # #                 pixel_size=SLM_PIXEL_SIZE,
+    # #                 shape=SLM_SHAPE) 
 
 
-    # #sum holograms together
-    # x = lens + hor_grating_1 + hor_grating_2 + trap_hologram + ver_grating
+    # # # #sum holograms together
+    # # # x = lens + hor_grating_1 + hor_grating_2 + trap_hologram + ver_grating
 
-    #                 #apply circular aperture
-    # holo = circ(x,
-    #             x0=X0,
-    #             y0=Y0,
-    #             radius = APERTURE_RADIUS)
+    # # #                 #apply circular aperture
+    # # # holo = circ(x,
+    # # #             x0=X0,
+    # # #             y0=Y0,
+    # # #             radius = APERTURE_RADIUS)
 
 
     
@@ -124,7 +128,7 @@ def main():
 
 
     # #apply hologram to SLM
-    # slm.apply_hologram(holo)
+    # slm.apply_hologram(trap_hologram)
 
     # #pause to allow for grating to loads
     # time.sleep(0.5)

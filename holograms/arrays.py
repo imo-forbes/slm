@@ -65,10 +65,10 @@ def aags(traps='(256,256),(260,256),(256,260),(260,260)',iterations=20,
         
         if i == N:
             psi_N = psi
-            print('i=N')
+            # print('i=N')
         elif i > N:
             psi = psi_N
-            print('i>N')
+            # print('i>N')
         
         B_N = 0
         for trap in traps:
@@ -120,6 +120,9 @@ def generate_input_intensity(waist=None,center=None,shape=(512,512)):
         return I
 
 
+
+
+
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
     import sys
@@ -128,7 +131,7 @@ if __name__ == '__main__':
     from apertures import circ
 
     traps = [(256,256),(260,260),(256,260),(260,256)]
-    holo = aags(traps,input_waist=210)
+    holo = aags(traps)#,input_waist=210)
     plt.pcolor(holo)
     plt.colorbar()
     plt.show()
